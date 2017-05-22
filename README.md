@@ -1,0 +1,2 @@
+# yavdr.seed
+yavdr-preseed
