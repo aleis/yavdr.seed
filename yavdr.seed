@@ -1,0 +1,26 @@
+# Enable extras.ubuntu.com.
+d-i     apt-setup/extras        boolean true
+# Always install the server kernel.
+d-i     base-installer/kernel/override-image    string linux-generic
+# Only install basic language packs. Let tasksel ask about tasks.
+d-i     pkgsel/language-pack-patterns   string
+# No language support packages.
+d-i     pkgsel/install-language-support boolean false
+# Only ask the UTC question if there are other operating systems installed.
+d-i     clock-setup/utc-auto    boolean true
+d-i tasksel/first multiselect
+d-i     preseed/early_command   string . /usr/share/debconf/confmodule; db_get debconf/priority; case $RET in low|medium) db_fset tasksel/first seen false; echo 'tasksel tasksel/first seen false' >>/var/lib/preseed/log ;; esac
+d-i pkgsel/include string yavdr-essential nvidia-current nvidia-common nvidia-settings man mlocate cifs-utils samba samba-common samba-common-bin smbclient ntfs-3g v86d lsb-invalid-mta
+d-i vdr-addon-noad/auto	boolean true
+d-i pkgsel/update-policy select none
+d-i pkgsel/upgrade select none
+
+d-i lirc/remote	select Custom
+d-i lirc/transmitter select None
+user-setup-udeb user-setup/encrypt-home boolean false
+
+# The user account will be added to some standard initial groups. To
+# override that, use this.
+d-i passwd/user-default-groups string audio cdrom video adm
+
+d-i preseed/late_command string in-target yavdr-post-install
